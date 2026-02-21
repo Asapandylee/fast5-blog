@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
@@ -13,75 +12,151 @@ const posts = (await getCollection('blog')).sort(
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={`블로그 — ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				width: 960px;
+			.page-header {
+				padding: 3em 1em 2em;
+				max-width: 760px;
+				margin: 0 auto;
 			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
+			.page-header h1 {
+				font-size: 2em;
+				margin-bottom: 0.3em;
 			}
-			ul li {
-				width: calc(50% - 1rem);
+			.page-header p {
+				color: rgb(var(--gray));
+				font-size: 0.95em;
 			}
-			ul li * {
+			.post-grid {
+				max-width: 760px;
+				margin: 0 auto;
+				padding: 0 1em 5em;
+			}
+			/* Featured first post */
+			.post-featured {
+				display: block;
+				margin-bottom: 2.5em;
 				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
 				border-radius: 12px;
+				overflow: hidden;
+				border: 1px solid rgba(124, 58, 237, 0.15);
+				background: var(--bg-card);
+				transition: border-color 0.2s, transform 0.15s;
 			}
-			ul li a {
+			.post-featured:hover {
+				border-color: var(--accent);
+				transform: translateY(-2px);
+			}
+			.post-featured img {
+				width: 100%;
+				height: 280px;
+				object-fit: cover;
+				border-radius: 0;
 				display: block;
 			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
+			.post-featured-placeholder {
+				width: 100%;
+				height: 280px;
+				background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(6, 182, 212, 0.1));
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 3em;
 			}
-			.date {
-				margin: 0;
+			.post-featured-body {
+				padding: 1.5em;
+			}
+			.post-featured-body .post-date {
+				font-size: 0.8em;
 				color: rgb(var(--gray));
+				margin-bottom: 0.5em;
 			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
+			.post-featured-body h2 {
+				font-size: 1.5em;
+				color: rgb(var(--black));
+				margin-bottom: 0.5em;
+				line-height: 1.3;
+				transition: color 0.2s;
 			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
+			.post-featured:hover h2 {
+				color: var(--accent-light);
 			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
+			.post-featured-body p {
+				color: rgb(var(--gray));
+				font-size: 0.9em;
+				line-height: 1.6;
+				margin: 0;
+			}
+			/* List of remaining posts */
+			.post-list {
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+			.post-item {
+				display: flex;
+				gap: 1.5em;
+				align-items: flex-start;
+				padding: 1.5em 0;
+				border-bottom: 1px solid rgba(124, 58, 237, 0.08);
+				text-decoration: none;
+			}
+			.post-item:last-child {
+				border-bottom: none;
+			}
+			.post-thumb {
+				width: 110px;
+				height: 75px;
+				border-radius: 8px;
+				object-fit: cover;
+				flex-shrink: 0;
+			}
+			.post-thumb-placeholder {
+				width: 110px;
+				height: 75px;
+				border-radius: 8px;
+				flex-shrink: 0;
+				background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(6, 182, 212, 0.08));
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.4em;
+			}
+			.post-meta {
+				flex: 1;
+				min-width: 0;
+			}
+			.post-date {
+				font-size: 0.78em;
+				color: rgb(var(--gray));
+				margin-bottom: 0.3em;
+			}
+			.post-title {
+				font-size: 1.05em;
+				font-weight: 700;
+				color: rgb(var(--black));
+				line-height: 1.35;
+				margin-bottom: 0.4em;
+				transition: color 0.15s;
+			}
+			.post-item:hover .post-title {
+				color: var(--accent-light);
+			}
+			.post-desc {
+				font-size: 0.87em;
+				color: rgb(var(--gray));
+				line-height: 1.5;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+			}
+			@media (max-width: 520px) {
+				.post-thumb,
+				.post-thumb-placeholder {
+					display: none;
 				}
 			}
 		</style>
@@ -89,25 +164,49 @@ const posts = (await getCollection('blog')).sort(
 	<body>
 		<Header />
 		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
+			<div class="page-header">
+				<h1>블로그</h1>
+				<p>총 {posts.length}개의 글</p>
+			</div>
+
+			<div class="post-grid">
+				{posts.length > 0 && (() => {
+					const [first, ...rest] = posts;
+					return (
+						<>
+							<a href={`/blog/${first.id}/`} class="post-featured">
+								{first.data.heroImage
+									? <img src={first.data.heroImage} alt={first.data.title} loading="lazy" />
+									: <div class="post-featured-placeholder">✦</div>
+								}
+								<div class="post-featured-body">
+									<div class="post-date"><FormattedDate date={first.data.pubDate} /></div>
+									<h2>{first.data.title}</h2>
+									<p>{first.data.description}</p>
+								</div>
+							</a>
+
+							{rest.length > 0 && (
+								<div class="post-list">
+									{rest.map((post) => (
+										<a href={`/blog/${post.id}/`} class="post-item">
+											{post.data.heroImage
+												? <img class="post-thumb" src={post.data.heroImage} alt="" loading="lazy" />
+												: <div class="post-thumb-placeholder">✦</div>
+											}
+											<div class="post-meta">
+												<div class="post-date"><FormattedDate date={post.data.pubDate} /></div>
+												<div class="post-title">{post.data.title}</div>
+												<div class="post-desc">{post.data.description}</div>
+											</div>
+										</a>
+									))}
+								</div>
+							)}
+						</>
+					);
+				})()}
+			</div>
 		</main>
 		<Footer />
 	</body>
